@@ -39,6 +39,7 @@ public class HomeScene : MonoBehaviour {
 	// Mono -> Update
 	//------------------------------------------
 	void Update () {
+		q = Input.gyro.attitude;
 		// モードによって状態を分ける
 		switch (CurrentMode) {
 		case Mode.Home:
@@ -116,22 +117,22 @@ public class HomeScene : MonoBehaviour {
 		CurrentMode = Mode.Home;
 		AbsButton.SetActive(true);
 	}
-
+	Quaternion q = Quaternion.identity;
 	//------------------------------------------
 	// 実機用デバッグ表示
 	//------------------------------------------
 	void OnGUI() {
 		// Androidの傾き表示
-		Quaternion q = Input.gyro.attitude;
+
 		//Input.gyro.userAcceleration;
 
 		GUIStyle style = new GUIStyle ();
 		GUIStyleState state = new GUIStyleState ();
 		state.textColor = Color.black;
 		style.normal = state;
-
-		GUI.Label(new Rect(20,20,300,60),string.Format("X:",q.x),style);
-		GUI.Label(new Rect(20,40,300,80),string.Format("Y:",q.y),style);
-		GUI.Label(new Rect(20,60,300,100),string.Format("Z:",q.z),style);
+		
+		GUI.Label(new Rect(20,20,300,60),string.Format("X:{0}", q.eulerAngles.x),style);
+		GUI.Label(new Rect(20,40,300,80),string.Format("Y:{0}", q.eulerAngles.y),style);
+		GUI.Label(new Rect(20,60,300,100),string.Format("Z:{0}", q.eulerAngles.z),style);
 	}
 }
