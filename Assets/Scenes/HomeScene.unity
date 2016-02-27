@@ -781,7 +781,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 521109703}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2075822910}
+        m_MethodName: OnAbsButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!1 &559151213
@@ -962,7 +973,7 @@ MonoBehaviour:
   m_Interactable: 1
   m_TargetGraphic: {fileID: 725024906}
   m_TextComponent: {fileID: 725024906}
-  m_Placeholder: {fileID: 0}
+  m_Placeholder: {fileID: 329860651}
   m_ContentType: 0
   m_InputType: 0
   m_AsteriskChar: 42
