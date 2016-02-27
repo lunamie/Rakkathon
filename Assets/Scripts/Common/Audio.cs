@@ -11,7 +11,7 @@ public class Audio : MonoBehaviour
 	{
 		get
 		{
-			return instance ?? new GameObject("Audio").AddComponent<Audio>();
+			return instance_ = instance_ ?? new GameObject("Audio").AddComponent<Audio>();
 		}
 	}
 
@@ -39,7 +39,7 @@ public class Audio : MonoBehaviour
 	/// <param name="fileName"></param>
 	public void PlaySE( string fileName )
 	{
-		if ( clips.ContainsKey(fileName) )
+		if ( !clips.ContainsKey(fileName) )
 		{
 			clips[fileName] = Resources.Load<AudioClip>(fileName);
 		}
@@ -53,7 +53,7 @@ public class Audio : MonoBehaviour
 	/// <param name="fileName"></param>
 	public void PlayBGM( string fileName )
 	{
-		if ( clips.ContainsKey(fileName) )
+		if ( !clips.ContainsKey(fileName) )
 		{
 			clips[fileName] = Resources.Load<AudioClip>(fileName);
 		}
