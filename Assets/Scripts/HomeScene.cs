@@ -24,8 +24,9 @@ public class HomeScene : MonoBehaviour {
 	//------------------------------------------
 	void Start () {
 		Debug.Log("ホーム画面");
-
 		CountUPText.text = CurrentCount.ToString();
+		// ジャイロON?
+		Input.gyro.enabled = true;
 	}
 
 	//------------------------------------------
@@ -93,5 +94,23 @@ public class HomeScene : MonoBehaviour {
 	public void OnAbsButton() {
 		CurrentMode = Mode.Abs;
 		Debug.Log("腹筋モードへ移行");
+	}
+
+	//------------------------------------------
+	// 実機用デバッグ表示
+	//------------------------------------------
+	void OnGUI() {
+		// Androidの傾き表示
+		Quaternion q = Input.gyro.attitude;
+		//Input.gyro.userAcceleration;
+
+		GUIStyle style = new GUIStyle ();
+		GUIStyleState state = new GUIStyleState ();
+		state.textColor = Color.black;
+		style.normal = state;
+
+		GUI.Label(new Rect(20,20,300,60),string.Format("X:",q.x),style);
+		GUI.Label(new Rect(20,40,300,80),string.Format("Y:",q.y),style);
+		GUI.Label(new Rect(20,60,300,100),string.Format("Z:",q.z),style);
 	}
 }
