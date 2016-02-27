@@ -11,11 +11,13 @@ public class InputScene : MonoBehaviour {
 	[SerializeField] InputField Health;
 
 	void Start () {
-		// 選択可能名前一覧に設定
-		// @todo:後でcsvから読み込む
+		var nameMasterTable = new NameMasterTable ();
+		nameMasterTable.Load ();
+
+		// csvの名前一覧を設定
 		Dropdown.OptionDataList nameList = new Dropdown.OptionDataList();
-		for (int i = 0; i < NameList.Length; ++i) {
-			nameList.options.Add (new Dropdown.OptionData(NameList[i]));
+		for (int i = 0; i < nameMasterTable.All.Count; ++i) {
+			nameList.options.Add (new Dropdown.OptionData(nameMasterTable.All[i].Name));
 		}
 		NameDoropDown.options = nameList.options;
 	}
