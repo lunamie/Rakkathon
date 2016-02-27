@@ -96,7 +96,7 @@ GameObject:
   - 222: {fileID: 236558556}
   - 114: {fileID: 236558555}
   m_Layer: 5
-  m_Name: Image
+  m_Name: Test
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
