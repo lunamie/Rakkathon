@@ -30,6 +30,9 @@ public class HomeScene : MonoBehaviour {
 		CountUPText.text = CurrentCount.ToString();
 		// ジャイロON?
 		Input.gyro.enabled = true;
+
+		Debug.Log (PlayerPrefs.GetString(Const.NameKey));
+		Debug.Log (PlayerPrefs.GetFloat(Const.GoalHealthKey));
 	}
 
 	//------------------------------------------
