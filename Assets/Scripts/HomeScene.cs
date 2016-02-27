@@ -5,9 +5,12 @@ using System.Collections;
 public class HomeScene : MonoBehaviour {
 
 	[SerializeField] Text CountUPText;
+	[SerializeField] GameObject AbsButton;
+	[SerializeField] GameObject ResultDialog;
 
 	private int MaxCount = 5;		// 目標値
 	private int CurrentCount = 0;
+	private bool IsChangeMode = false;
 
 	// ホーム画面内でのモード
 	private enum Mode{
@@ -45,8 +48,7 @@ public class HomeScene : MonoBehaviour {
 			}
 			break;
 		case Mode.Result:
-			// リザルト出したら自動でホームモードに戻る
-			CurrentMode = Mode.Home;
+			// リザルトでOK押したらHomeに戻る
 			break;
 		};
 	}
@@ -67,8 +69,12 @@ public class HomeScene : MonoBehaviour {
 
 			if (CurrentCount == MaxCount) {
 				CurrentMode = Mode.Result;
+				CurrentCount = 0;
 				// ほめてくれるボイス再生
 				Audio.instance.PlaySE(string.Format(VoicePathFormat,"sample"));
+				// リザルト表示
+				ShowResult();
+
 				Debug.Log ("目標カウントに到達しました！");
 			}
 		}
@@ -77,23 +83,35 @@ public class HomeScene : MonoBehaviour {
 	//------------------------------------------
 	// ジャイロセンサーチェック？
 	//------------------------------------------
-	private void CheckAbs() {
+	private bool CheckAbs() {
 
+		return false;
 	}
 
 	//------------------------------------------
-	// リザルトダイアログ
+	// リザルトダイアログ表示
 	//------------------------------------------
-	private void Result() {
-
+	private void ShowResult() {
+		ResultDialog.gameObject.SetActive(true);
 	}
 
 	//------------------------------------------
 	// 腹筋ボタン
 	//------------------------------------------
 	public void OnAbsButton() {
+		IsChangeMode = true;
 		CurrentMode = Mode.Abs;
+		AbsButton.SetActive (false);
 		Debug.Log("腹筋モードへ移行");
+	}
+
+	//------------------------------------------
+	// リザルトOKボタン
+	//------------------------------------------
+	public void OnResultOKButton() {
+		ResultDialog.gameObject.SetActive(false);
+		CurrentMode = Mode.Home;
+		AbsButton.SetActive(true);
 	}
 
 	//------------------------------------------
