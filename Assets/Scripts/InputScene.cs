@@ -10,17 +10,17 @@ public class InputScene : MonoBehaviour {
 	[SerializeField] InputField Health;
 	[SerializeField] Button EnterButton;
 
-	private bool IsPossibleEntry = false;
-	private bool IsSettingName = false;
+	private MessageMasterTable MessageTable = new MessageMasterTable();
+	private NameMasterTable NameTable = new NameMasterTable();
 
 	void Start () {
-		var nameMasterTable = new NameMasterTable ();
-		nameMasterTable.Load ();
+		NameTable.Load ();
+		MessageTable.Load();
 
 		// csvの名前一覧を設定
 		Dropdown.OptionDataList nameList = new Dropdown.OptionDataList();
-		for (int i = 0; i < nameMasterTable.All.Count; ++i) {
-			nameList.options.Add (new Dropdown.OptionData(nameMasterTable.All[i].Name));
+		for (int i = 0; i < NameTable.All.Count; ++i) {
+			nameList.options.Add (new Dropdown.OptionData(NameTable.All[i].Name));
 		}
 		NameDoropDown.options = nameList.options;
 
@@ -37,7 +37,10 @@ public class InputScene : MonoBehaviour {
 	}
 
 	// 名前ドロップダウンリスト
-	public void OnValueChanged(int name){
+	public void OnValueChanged(){
+		// ボイス再生
+		string seName = NameTable.All.Find(x => x.Name == NameDoropDown.captionText.text).SE1;
+		Audio.instance.PlaySE(string.Format(Const.SEPathFormat,seName));
 	}
 
 	// 決定ボタン
