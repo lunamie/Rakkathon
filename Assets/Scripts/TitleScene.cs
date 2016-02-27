@@ -17,7 +17,7 @@ public class TitleScene : MonoBehaviour {
 	public void OnStart() {
 		//　登録済みだったらホーム画面に行く
 		if (IsEntry) {
-			SceneManager.LoadScene ("TitleScene");
+			SceneManager.LoadScene ("HomeScene");
 		} else {
 			SceneManager.LoadScene ("InputScene");
 		}
