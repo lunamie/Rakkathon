@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System.Linq;
 
 public class HomeScene : MonoBehaviour {
 
@@ -24,15 +25,20 @@ public class HomeScene : MonoBehaviour {
 	//------------------------------------------
 	// Mono -> Start
 	//------------------------------------------
-	void Start () {
+	void Start(){
 		Debug.Log("ホーム画面");
 		CountUPText.text = CurrentCount.ToString();
 		// ジャイロON?
 		Input.gyro.enabled = true;
 
-		Debug.Log (PlayerPrefs.GetString(Const.NameKey));
-		Debug.Log (PlayerPrefs.GetFloat(Const.GoalHealthKey));
+		Debug.Log(PlayerPrefs.GetString(Const.NameKey));
+		Debug.Log(PlayerPrefs.GetFloat(Const.GoalHealthKey));
+
+		messageMaster.Load();
+
 	}
+
+	public MessageMasterTable messageMaster = new MessageMasterTable ();
 
 	//------------------------------------------
 	// Mono -> Update
@@ -45,8 +51,7 @@ public class HomeScene : MonoBehaviour {
 			// 何もしない
 			break;
 		case Mode.Abs:
-			// @todo:ここは腹筋をしたかどうかの判定になる予定
-			if (Input.GetKeyDown (KeyCode.Space)) {
+			if ( CheckAbs() ) {
 				CountUP();
 			}
 			break;
@@ -66,15 +71,16 @@ public class HomeScene : MonoBehaviour {
 			// 画面の数字に反映させる
 			CountUPText.text = CurrentCount.ToString();
 			// ボイス再生
-			string seName = string.Format("count_voice_{0}",CurrentCount);
-			// @todo:ラスト一回になった時だけ違うボイス再生
-			Audio.instance.PlaySE(string.Format(VoicePathFormat,"sample"));
+			var currentCntMessage = messageMaster.All.FirstOrDefault(n => n.Message == CurrentCount.ToString());
+			Audio.instance.PlaySE(string.Format(VoicePathFormat, currentCntMessage.SEName));
 
-			if (CurrentCount == MaxCount) {
+			if ( CurrentCount == MaxCount) {
 				CurrentMode = Mode.Result;
 				CurrentCount = 0;
 				// ほめてくれるボイス再生
-				Audio.instance.PlaySE(string.Format(VoicePathFormat,"sample"));
+				var message = messageMaster.All.FirstOrDefault(n => n.Message == "おめでとう！");
+				Audio.instance.PlaySE(string.Format(VoicePathFormat, message.SEName));
+
 				// リザルト表示
 				ShowResult();
 
@@ -83,12 +89,37 @@ public class HomeScene : MonoBehaviour {
 		}
 	}
 
+	enum AbsState
+	{
+		None,
+		Lie,
+		GetUp
+	}
+
+	private AbsState absState = AbsState.None;
 	//------------------------------------------
 	// ジャイロセンサーチェック？
 	//------------------------------------------
 	private bool CheckAbs() {
+		float rad = Mathf.Abs( (int)q.eulerAngles.y % 180 - 90 );
+		if ( absState != AbsState.Lie )
+		{
+			if ( rad > 80 )
+			{
+				absState = AbsState.Lie;
 
-		return false;
+			}
+			return false;
+		}
+		else
+		{
+			if ( rad < 10 )
+			{
+				absState = AbsState.GetUp;
+				return true;
+			}
+			return false;
+		}
 	}
 
 	//------------------------------------------
