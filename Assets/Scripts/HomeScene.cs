@@ -5,7 +5,6 @@ using System.Collections;
 public class HomeScene : MonoBehaviour {
 
 	[SerializeField] Text CountUPText;
-	[SerializeField] GameObject AbsButton;
 	[SerializeField] GameObject ResultDialog;
 
 	private int MaxCount = 5;		// 目標値
@@ -105,7 +104,6 @@ public class HomeScene : MonoBehaviour {
 	public void OnAbsButton() {
 		IsChangeMode = true;
 		CurrentMode = Mode.Abs;
-		AbsButton.SetActive (false);
 		Debug.Log("腹筋モードへ移行");
 	}
 
@@ -115,7 +113,6 @@ public class HomeScene : MonoBehaviour {
 	public void OnResultOKButton() {
 		ResultDialog.gameObject.SetActive(false);
 		CurrentMode = Mode.Home;
-		AbsButton.SetActive(true);
 	}
 	Quaternion q = Quaternion.identity;
 	//------------------------------------------
