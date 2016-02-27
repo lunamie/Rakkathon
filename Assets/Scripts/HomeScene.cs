@@ -17,6 +17,8 @@ public class HomeScene : MonoBehaviour {
 	};
 	private Mode CurrentMode = Mode.Home;
 
+	private static readonly string VoicePathFormat = "Voice/{0}";
+
 	//------------------------------------------
 	// Mono -> Start
 	//------------------------------------------
@@ -58,14 +60,14 @@ public class HomeScene : MonoBehaviour {
 			// 画面の数字に反映させる
 			CountUPText.text = CurrentCount.ToString();
 			// ボイス再生
-			// @todo:ラスト一回になった時だけ違うボイス再生
 			string seName = string.Format("count_voice_{0}",CurrentCount);
-			//Audio.instance.PlaySE(seName);
+			// @todo:ラスト一回になった時だけ違うボイス再生
+			Audio.instance.PlaySE(string.Format(VoicePathFormat,"sample"));
 
 			if (CurrentCount == MaxCount) {
 				CurrentMode = Mode.Result;
 				// ほめてくれるボイス再生
-				//Audio.instance.PlaySE("");
+				Audio.instance.PlaySE(string.Format(VoicePathFormat,"sample"));
 				Debug.Log ("目標カウントに到達しました！");
 			}
 		}
