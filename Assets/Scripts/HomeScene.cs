@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using System.Collections;
 using System.Linq;
 
@@ -15,9 +16,10 @@ public class HomeScene : MonoBehaviour {
 	[SerializeField]
 	GameObject HomeRoot;
 
-	private int MaxCount = 15;		// 目標値
+	private int MaxCount = 0;		// 目標値
 	private int CurrentCount = 0;
 	private bool IsChangeMode = false;
+	private int CurrentDay = 0;
 
 	// ホーム画面内でのモード
 	private enum Mode{
@@ -27,6 +29,9 @@ public class HomeScene : MonoBehaviour {
 		CountDown,
 	};
 	private Mode CurrentMode = Mode.Home;
+
+	// 日付が変わったか見る用
+	private static int Today = 0;
 
 	private static readonly string VoicePathFormat = "Voice/{0}";
 
@@ -44,6 +49,11 @@ public class HomeScene : MonoBehaviour {
 
 		messageMaster.Load();
 
+		// 継続日数によって目標値を設定
+		CurrentDay = PlayerPrefs.GetInt(Const.CurrentDay,1);
+		MaxCount = Const.RecordGoalList [CurrentDay - 1];
+		// 今日の日付取得
+		Today = System.DateTime.Now.Day;
 	}
 
 	public MessageMasterTable messageMaster = new MessageMasterTable ();
@@ -178,6 +188,11 @@ public class HomeScene : MonoBehaviour {
 		HomeRoot.gameObject.SetActive(false);
 		CountDown();
 		CountMaxText.text = "/" + MaxCount.ToString();
+		if (Today != System.DateTime.Now.Day) {
+			// 日付が変わったので
+			PlayerPrefs.SetInt (Const.PrevDay, Today);
+			PlayerPrefs.SetInt (Const.CurrentDay, ++CurrentDay);
+		}
 		Debug.Log("腹筋モードへ移行　カウントダウン開始");
 	}
 
@@ -207,11 +222,27 @@ public class HomeScene : MonoBehaviour {
 	}
 
 	//------------------------------------------
-	// リタイアボタン
+	// 名前変更ボタン
 	//------------------------------------------
 	public void OnNameChange()
 	{
 		UnityEngine.SceneManagement.SceneManager.LoadScene("InputScene");
+	}
+
+	//------------------------------------------
+	// 今日の体重
+	//------------------------------------------
+	public void OnValueChanged()
+	{
+		PlayerPrefs.SetFloat (Const.TodayHealthKey, 0f);
+	}
+
+	//------------------------------------------
+	// ときめき記録
+	//------------------------------------------
+	public void OnRecord()
+	{
+		SceneManager.LoadScene ("RecordScene");
 	}
 
 	/**

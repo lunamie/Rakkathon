@@ -8,8 +8,9 @@ public class Const {
 	public static readonly string GoalHealthKey = "Health";
 	public static readonly string TodayHealthKey = "TodayHealth";
 	public static readonly string RecordKey = "Record_{0}";
-	public static readonly string CurrentDay = "CurrentDay";
+	public static readonly string CurrentDay = "CurrentDay";	// 1～7が１週なので7が最大
 	public static readonly string CurrentWeek = "CurrentWeek";
+	public static readonly string PrevDay = "PrevDay";
 
 	// messageマスターのTimingカラムに連動している
 	public enum PlaytTiming {
@@ -21,4 +22,7 @@ public class Const {
 		ResultOkButtonClick,	// トレーニング完了時
 		HomeModelTouch,			// ホームでモデルタッチ時
 	}
+
+	// １週の目標値
+	public static readonly int[] RecordGoalList = new int[]{ 15,30,45,60,75,90,100 };
 }

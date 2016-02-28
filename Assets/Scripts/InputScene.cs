@@ -25,7 +25,11 @@ public class InputScene : MonoBehaviour {
 		NameDoropDown.options = nameList.options;
 
 		// 初期値はなし
-		NameDoropDown.captionText.text = "";
+		NameDoropDown.captionText.text = PlayerPrefs.GetString(Const.NameKey,"");
+		float health = PlayerPrefs.GetFloat (Const.GoalHealthKey, 0.0f);
+		if (health > 0.0f) {
+			Health.text = health.ToString ();
+		}
 	}
 
 	void Update () {

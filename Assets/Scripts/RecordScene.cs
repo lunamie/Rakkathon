@@ -11,9 +11,6 @@ public class RecordScene : MonoBehaviour {
 	[SerializeField] Text[] RecordResultTexts;
 	[SerializeField] Text[] RecordGoalTexts;
 
-	// １週の目標値
-	private int[] RecordGoalList = new int[]{ 15,30,45,60,75,90,100 };
-
 	void Start () {
 		// 今何週目かを設定
 		string week = string.Format("{0}週目",PlayerPrefs.GetInt(Const.CurrentWeek,1));
@@ -21,7 +18,7 @@ public class RecordScene : MonoBehaviour {
 
 		//　目標値設定
 		for (int i = 0; i < RecordGoalTexts.Length; ++i) {
-			RecordGoalTexts [i].text = RecordGoalList [i].ToString();
+			RecordGoalTexts [i].text = Const.RecordGoalList [i].ToString();
 		}
 
 		// PlayerPrefsから結果を取得して設定 なかったら０が入る
@@ -30,7 +27,7 @@ public class RecordScene : MonoBehaviour {
 			int record = PlayerPrefs.GetInt(key, 0);
 			RecordResultTexts [i].text = record.ToString();
 			// 目標数を達成していたら中を黄色くする
-			if (record >= RecordGoalList [i]) {
+			if (record >= Const.RecordGoalList [i]) {
 				RecordResultClearImages [i].gameObject.SetActive (true);
 			} else {
 				RecordResultClearImages [i].gameObject.SetActive (false);
