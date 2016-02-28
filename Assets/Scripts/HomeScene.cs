@@ -24,6 +24,7 @@ public class HomeScene : MonoBehaviour {
 	Text ResultCountMaxText;
 	private int CurrentCount = 0;
 	private int CurrentDay = 0;
+	private bool IsPlayingVoice = false;
 
 	// ホーム画面内でのモード
 	private enum Mode{
@@ -269,7 +270,31 @@ public class HomeScene : MonoBehaviour {
 		SceneManager.LoadScene ("RecordScene");
 	}
 
-	/**
+	//------------------------------------------
+	// モデル表示領域を押した
+	//------------------------------------------
+	public void OnClickModelArea()
+	{
+		//ランダムでしゃべる
+		if (!IsPlayingVoice) {
+			var messages = messageMaster.All.Where (n => n.Timing == (int)Const.PlaytTiming.HomeModelTouch);
+			var message = messages.ElementAtOrDefault (Random.Range (0, messages.Count ()));
+			Audio.instance.PlaySE (string.Format (VoicePathFormat, message.SEName));
+			StartCoroutine(PlayVoiceInterval());
+		}
+	}
+
+	//------------------------------------------
+	// ボイス再生されたら２秒間隔空ける
+	//------------------------------------------
+	private IEnumerator PlayVoiceInterval()
+	{
+		IsPlayingVoice = true;
+		yield return new WaitForSeconds (2.0f);
+		IsPlayingVoice = false;
+	}
+
+	/*
 	//------------------------------------------
 	// 実機用デバッグ表示
 	//------------------------------------------
