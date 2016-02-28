@@ -9,14 +9,18 @@ public class HomeScene : MonoBehaviour {
 	[SerializeField] Text CountUPText;
 	[SerializeField] Text CountMaxText;
 
-	[SerializeField] GameObject ResultDialog;
-
 	[SerializeField]
 	GameObject AbsRoot;
 	[SerializeField]
 	GameObject HomeRoot;
+	[SerializeField]
+	GameObject ResultRoot;
 
 	private int MaxCount = 0;		// 目標値
+	[SerializeField]
+	Text ResultCountUPText;
+	[SerializeField]
+	Text ResultCountMaxText;
 	private int CurrentCount = 0;
 	private bool IsChangeMode = false;
 	private int CurrentDay = 0;
@@ -93,6 +97,8 @@ public class HomeScene : MonoBehaviour {
 			Audio.instance.PlaySE(string.Format(VoicePathFormat, currentCntMessage.SEName));
 
 			if ( CurrentCount == MaxCount) {
+				ResultCountUPText.text = CurrentCount.ToString();
+				ResultCountMaxText.text = "/" + MaxCount.ToString();
 				CurrentMode = Mode.Result;
 				CurrentCount = 0;
 				// ほめてくれるボイス再生
@@ -152,7 +158,9 @@ public class HomeScene : MonoBehaviour {
 	// リザルトダイアログ表示
 	//------------------------------------------
 	private void ShowResult() {
-		ResultDialog.gameObject.SetActive(true);
+		HomeRoot.gameObject.SetActive(false);
+		AbsRoot.gameObject.SetActive(false);
+		ResultRoot.gameObject.SetActive(true);
 	}
 
 	private void CountDown()
@@ -177,14 +185,15 @@ public class HomeScene : MonoBehaviour {
 		Audio.instance.PlaySE(string.Format(VoicePathFormat, message.SEName));
 		CurrentMode = Mode.Abs;
 	}
-
+	
 	//------------------------------------------
 	// 腹筋ボタン
 	//------------------------------------------
 	public void OnAbsButton() {
 		IsChangeMode = true;
 		CurrentMode = Mode.CountDown;
-		AbsRoot.gameObject.SetActive(true);
+		ResultRoot.gameObject.SetActive(false);
+        AbsRoot.gameObject.SetActive(true);
 		HomeRoot.gameObject.SetActive(false);
 		CountDown();
 		CountMaxText.text = "/" + MaxCount.ToString();
@@ -200,7 +209,7 @@ public class HomeScene : MonoBehaviour {
 	// リザルトOKボタン
 	//------------------------------------------
 	public void OnResultOKButton() {
-		ResultDialog.gameObject.SetActive(false);
+		ResultRoot.gameObject.SetActive(false);
 		AbsRoot.gameObject.SetActive(false);
 		HomeRoot.gameObject.SetActive(true);
 		CurrentMode = Mode.Home;
@@ -216,7 +225,8 @@ public class HomeScene : MonoBehaviour {
 		{
 			return;
 		}
-		AbsRoot.gameObject.SetActive(false);
+		ResultRoot.gameObject.SetActive(false);
+        AbsRoot.gameObject.SetActive(false);
 		HomeRoot.gameObject.SetActive(true);
 		CurrentMode = Mode.Home;
 	}
