@@ -1650,7 +1650,6 @@ GameObject:
   - 20: {fileID: 1571780640}
   - 92: {fileID: 1571780639}
   - 124: {fileID: 1571780638}
-  - 81: {fileID: 1571780637}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -1658,13 +1657,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!81 &1571780637
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1571780636}
-  m_Enabled: 1
 --- !u!124 &1571780638
 Behaviour:
   m_ObjectHideFlags: 0
@@ -1801,9 +1793,9 @@ MonoBehaviour:
   m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 960, y: 640}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 1
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96

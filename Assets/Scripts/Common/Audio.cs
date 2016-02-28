@@ -31,6 +31,11 @@ public class Audio : MonoBehaviour
 	void Awake()
 	{
 		source = gameObject.AddComponent<AudioSource>();
+		gameObject.AddComponent<AudioListener>();
+
+		if (Application.isPlaying) {
+			DontDestroyOnLoad (gameObject);
+		}
 	}
 
 	/// <summary>

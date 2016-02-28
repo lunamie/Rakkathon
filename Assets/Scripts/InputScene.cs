@@ -50,6 +50,8 @@ public class InputScene : MonoBehaviour {
 		// 目標体重
 		PlayerPrefs.SetFloat (Const.GoalHealthKey,float.Parse(Health.text));
 
+		Audio.instance.PlaySE (string.Format(Const.SEPathFormat,"125"));
+
 		// ホームに遷移
 		SceneManager.LoadScene ("HomeScene");
 	}
