@@ -15,7 +15,7 @@ public class HomeScene : MonoBehaviour {
 	[SerializeField]
 	GameObject HomeRoot;
 
-	private int MaxCount = 5;		// 目標値
+	private int MaxCount = 15;		// 目標値
 	private int CurrentCount = 0;
 	private bool IsChangeMode = false;
 
@@ -93,6 +93,14 @@ public class HomeScene : MonoBehaviour {
 				ShowResult();
 
 				Debug.Log ("目標カウントに到達しました！");
+			}
+			else if( Random.Range(0, 4) == 0 )
+			{
+				//ランダムで腹筋時にしゃべる
+				var yaleMessages = messageMaster.All.Where(n => n.Timing == 2);
+				var message = yaleMessages.ElementAtOrDefault(Random.Range(0, yaleMessages.Count()));
+				Audio.instance.PlaySE(string.Format(VoicePathFormat, message.SEName));
+
 			}
 		}
 	}
