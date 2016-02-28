@@ -11,4 +11,5 @@ public class MessageMaster : MasterBase
 {
 	public string Message { get; private set; }
 	public string SEName { get; private set; }
+	public int Timing { get; private set; }
 }
