@@ -23,7 +23,7 @@ public class RecordScene : MonoBehaviour {
 
 		// PlayerPrefsから結果を取得して設定 なかったら０が入る
 		for (int i = 0; i < RecordResultTexts.Length; ++i) {
-			string key = string.Format(Const.RecordKey,i);
+			string key = string.Format(Const.RecordKey,i+1);
 			int record = PlayerPrefs.GetInt(key, 0);
 			RecordResultTexts [i].text = record.ToString();
 			// 目標数を達成していたら中を黄色くする

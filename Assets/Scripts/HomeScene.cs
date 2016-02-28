@@ -22,7 +22,6 @@ public class HomeScene : MonoBehaviour {
 	[SerializeField]
 	Text ResultCountMaxText;
 	private int CurrentCount = 0;
-	private bool IsChangeMode = false;
 	private int CurrentDay = 0;
 
 	// ホーム画面内でのモード
@@ -107,6 +106,10 @@ public class HomeScene : MonoBehaviour {
 
 				// リザルト表示
 				ShowResult();
+				// １日の合計腹筋回数に加算して保存する
+				int current = PlayerPrefs.GetInt (string.Format(Const.RecordKey,CurrentDay), 0);
+				Debug.Log (CurrentDay + "日に加算しました");
+				PlayerPrefs.SetInt (string.Format(Const.RecordKey,CurrentDay), MaxCount + current);
 
 				Debug.Log ("目標カウントに到達しました！");
 			}
@@ -190,7 +193,6 @@ public class HomeScene : MonoBehaviour {
 	// 腹筋ボタン
 	//------------------------------------------
 	public void OnAbsButton() {
-		IsChangeMode = true;
 		CurrentMode = Mode.CountDown;
 		ResultRoot.gameObject.SetActive(false);
         AbsRoot.gameObject.SetActive(true);
@@ -200,6 +202,16 @@ public class HomeScene : MonoBehaviour {
 		if (Today != System.DateTime.Now.Day) {
 			// 日付が変わったので
 			PlayerPrefs.SetInt (Const.PrevDay, Today);
+			// もし７日目だったら１日目からリセット　
+			if (CurrentDay == 7) {
+				CurrentDay = 0;
+				for (int i = 0; i < 7; ++i) {
+					PlayerPrefs.DeleteKey (string.Format (Const.RecordKey, i));
+				}
+				// ～週目を増やす
+				int currentWeek = PlayerPrefs.GetInt (Const.CurrentWeek, 1);
+				PlayerPrefs.SetInt (Const.CurrentWeek, ++currentWeek);
+			}
 			PlayerPrefs.SetInt (Const.CurrentDay, ++CurrentDay);
 		}
 		Debug.Log("腹筋モードへ移行　カウントダウン開始");
