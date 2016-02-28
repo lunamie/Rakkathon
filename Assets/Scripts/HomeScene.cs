@@ -6,7 +6,14 @@ using System.Linq;
 public class HomeScene : MonoBehaviour {
 
 	[SerializeField] Text CountUPText;
+	[SerializeField] Text CountMaxText;
+
 	[SerializeField] GameObject ResultDialog;
+
+	[SerializeField]
+	GameObject AbsRoot;
+	[SerializeField]
+	GameObject HomeRoot;
 
 	private int MaxCount = 5;		// 目標値
 	private int CurrentCount = 0;
@@ -17,6 +24,7 @@ public class HomeScene : MonoBehaviour {
 		Home,
 		Abs,
 		Result,
+		CountDown,
 	};
 	private Mode CurrentMode = Mode.Home;
 
@@ -51,7 +59,7 @@ public class HomeScene : MonoBehaviour {
 			// 何もしない
 			break;
 		case Mode.Abs:
-			if ( CheckAbs() ) {
+			if ( CheckAbs() || Input.GetKeyDown(KeyCode.V)) {
 				CountUP();
 			}
 			break;
@@ -129,13 +137,40 @@ public class HomeScene : MonoBehaviour {
 		ResultDialog.gameObject.SetActive(true);
 	}
 
+	private void CountDown()
+	{
+		StartCoroutine(CountDownRoutine());
+	}
+	IEnumerator CountDownRoutine()
+	{
+		var message = messageMaster.All.FirstOrDefault(n => n.Message == "用意はいい？");
+		Audio.instance.PlaySE(string.Format(VoicePathFormat, message.SEName));
+        yield return new WaitForSeconds(2f);
+		message = messageMaster.All.FirstOrDefault(n => n.Message == "3");
+		Audio.instance.PlaySE(string.Format(VoicePathFormat, message.SEName));
+		yield return new WaitForSeconds(1f);
+		message = messageMaster.All.FirstOrDefault(n => n.Message == "2");
+		Audio.instance.PlaySE(string.Format(VoicePathFormat, message.SEName));
+		yield return new WaitForSeconds(1f);
+		message = messageMaster.All.FirstOrDefault(n => n.Message == "1");
+		Audio.instance.PlaySE(string.Format(VoicePathFormat, message.SEName));
+		yield return new WaitForSeconds(1f);
+		message = messageMaster.All.FirstOrDefault(n => n.Message == "スタート！");
+		Audio.instance.PlaySE(string.Format(VoicePathFormat, message.SEName));
+		CurrentMode = Mode.Abs;
+	}
+
 	//------------------------------------------
 	// 腹筋ボタン
 	//------------------------------------------
 	public void OnAbsButton() {
 		IsChangeMode = true;
-		CurrentMode = Mode.Abs;
-		Debug.Log("腹筋モードへ移行");
+		CurrentMode = Mode.CountDown;
+		AbsRoot.gameObject.SetActive(true);
+		HomeRoot.gameObject.SetActive(false);
+		CountDown();
+		CountMaxText.text = "/" + MaxCount.ToString();
+		Debug.Log("腹筋モードへ移行　カウントダウン開始");
 	}
 
 	//------------------------------------------
@@ -143,9 +178,35 @@ public class HomeScene : MonoBehaviour {
 	//------------------------------------------
 	public void OnResultOKButton() {
 		ResultDialog.gameObject.SetActive(false);
+		AbsRoot.gameObject.SetActive(false);
+		HomeRoot.gameObject.SetActive(true);
 		CurrentMode = Mode.Home;
 	}
 	Quaternion q = Quaternion.identity;
+
+	//------------------------------------------
+	// リタイアボタン
+	//------------------------------------------
+	public void OnRetireButton()
+	{
+		if( CurrentMode != Mode.Abs )
+		{
+			return;
+		}
+		AbsRoot.gameObject.SetActive(false);
+		HomeRoot.gameObject.SetActive(true);
+		CurrentMode = Mode.Home;
+	}
+
+	//------------------------------------------
+	// リタイアボタン
+	//------------------------------------------
+	public void OnNameChange()
+	{
+		UnityEngine.SceneManagement.SceneManager.LoadScene("InputScene");
+	}
+
+	/**
 	//------------------------------------------
 	// 実機用デバッグ表示
 	//------------------------------------------
@@ -163,4 +224,5 @@ public class HomeScene : MonoBehaviour {
 		GUI.Label(new Rect(20,40,300,80),string.Format("Y:{0}", q.eulerAngles.y),style);
 		GUI.Label(new Rect(20,60,300,100),string.Format("Z:{0}", q.eulerAngles.z),style);
 	}
+	*/
 }
