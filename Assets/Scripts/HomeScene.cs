@@ -8,6 +8,7 @@ public class HomeScene : MonoBehaviour {
 
 	[SerializeField] Text CountUPText;
 	[SerializeField] Text CountMaxText;
+	[SerializeField] Text ToWeight;
 
 	[SerializeField]
 	GameObject AbsRoot;
@@ -55,6 +56,7 @@ public class HomeScene : MonoBehaviour {
 		// 継続日数によって目標値を設定
 		CurrentDay = PlayerPrefs.GetInt(Const.CurrentDay,1);
 		MaxCount = Const.RecordGoalList [CurrentDay - 1];
+		ToWeight.text = PlayerPrefs.GetFloat(Const.GoalHealthKey, 50.0f).ToString("F1") + " kg";
 		// 今日の日付取得
 		Today = System.DateTime.Now.Day;
 	}
