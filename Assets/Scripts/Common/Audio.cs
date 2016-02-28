@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
-
+using System.Collections;
 public class Audio : MonoBehaviour
 {
 	/// <summary>
@@ -42,15 +42,25 @@ public class Audio : MonoBehaviour
 	/// SE再生
 	/// </summary>
 	/// <param name="fileName"></param>
-	public void PlaySE( string fileName )
+	public void PlaySE( string fileName, float delay = 0f)
 	{
 		if ( !clips.ContainsKey(fileName) )
 		{
 			clips[fileName] = Resources.Load<AudioClip>(fileName);
 		}
-		source.PlayOneShot(clips[fileName]);
+
+		StartCoroutine(PlaySEWithDelay(clips[fileName], delay));
 	}
 
+	/// <summary>
+	/// SE再生
+	/// </summary>
+	/// <param name="fileName"></param>
+	public IEnumerator PlaySEWithDelay( AudioClip clip, float delay = 0f )
+	{
+		yield return new WaitForSeconds(delay);
+		source.PlayOneShot(clip);
+	}
 
 	/// <summary>
 	/// BGM再生

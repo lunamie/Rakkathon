@@ -40,6 +40,8 @@ public class HomeScene : MonoBehaviour {
 
 	private static readonly string VoicePathFormat = "Voice/{0}";
 
+	public string Name = "";
+
 	//------------------------------------------
 	// Mono -> Start
 	//------------------------------------------
@@ -49,10 +51,12 @@ public class HomeScene : MonoBehaviour {
 		// ジャイロON?
 		Input.gyro.enabled = true;
 
-		Debug.Log(PlayerPrefs.GetString(Const.NameKey));
+		Name = PlayerPrefs.GetString(Const.NameKey);
+		Debug.Log(Name);
 		Debug.Log(PlayerPrefs.GetFloat(Const.GoalHealthKey));
 
 		messageMaster.Load();
+		nameMaster.Load();
 
 		// 継続日数によって目標値を設定
 		CurrentDay = PlayerPrefs.GetInt(Const.CurrentDay,1);
@@ -63,6 +67,8 @@ public class HomeScene : MonoBehaviour {
 	}
 
 	public MessageMasterTable messageMaster = new MessageMasterTable ();
+	public NameMasterTable nameMaster = new NameMasterTable ();
+
 
 	//------------------------------------------
 	// Mono -> Update
@@ -105,7 +111,7 @@ public class HomeScene : MonoBehaviour {
 				CurrentCount = 0;
 				// ほめてくれるボイス再生
 				var message = messageMaster.All.FirstOrDefault(n => n.Message == "おめでとう！");
-				Audio.instance.PlaySE(string.Format(VoicePathFormat, message.SEName));
+				Audio.instance.PlaySE(string.Format(VoicePathFormat, message.SEName),2f);
 
 				// リザルト表示
 				ShowResult();
@@ -116,12 +122,27 @@ public class HomeScene : MonoBehaviour {
 
 				Debug.Log ("目標カウントに到達しました！");
 			}
-			else if( Random.Range(0, 4) == 0 )
+			else if( Random.Range(0, 3) == 0 )
 			{
 				//ランダムで腹筋時にしゃべる
 				var yaleMessages = messageMaster.All.Where(n => n.Timing == 2);
 				var message = yaleMessages.ElementAtOrDefault(Random.Range(0, yaleMessages.Count()));
-				Audio.instance.PlaySE(string.Format(VoicePathFormat, message.SEName));
+				if ( message != null )
+				{
+					Audio.instance.PlaySE(string.Format(VoicePathFormat, message.SEName), 2f + message.Delay);
+					switch ( message.Type )
+					{
+						case 1:
+							Audio.instance.PlaySE(string.Format(Const.SEPathFormat, nameMaster.All.Find(x => x.Name == Name).SE1),2f);
+							break;
+						case 2:
+							Audio.instance.PlaySE(string.Format(Const.SEPathFormat, nameMaster.All.Find(x => x.Name == Name).SE2),2f);
+							break;
+						case 3:
+							Audio.instance.PlaySE(string.Format(Const.SEPathFormat, nameMaster.All.Find(x => x.Name == Name).SE3),2f);
+							break;
+					}
+				}
 
 			}
 		}
@@ -201,6 +222,7 @@ public class HomeScene : MonoBehaviour {
         AbsRoot.gameObject.SetActive(true);
 		HomeRoot.gameObject.SetActive(false);
 		CountDown();
+		CountUPText.text = CurrentCount.ToString();
 		CountMaxText.text = "/" + MaxCount.ToString();
 		if (Today != System.DateTime.Now.Day) {
 			// 日付が変わったので
