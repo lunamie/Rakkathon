@@ -102,7 +102,7 @@ public class HomeScene : MonoBehaviour {
 			CountUPText.text = CurrentCount.ToString();
 			// ボイス再生
 			var currentCntMessage = messageMaster.All.FirstOrDefault(n => n.Message == CurrentCount.ToString());
-			Audio.instance.PlaySE(string.Format(VoicePathFormat, currentCntMessage.SEName));
+			Audio.instance.PlayVoice(string.Format(VoicePathFormat, currentCntMessage.SEName));
 
 			if ( CurrentCount == MaxCount) {
 				ResultCountUPText.text = CurrentCount.ToString();
@@ -111,7 +111,7 @@ public class HomeScene : MonoBehaviour {
 				CurrentCount = 0;
 				// ほめてくれるボイス再生
 				var message = messageMaster.All.FirstOrDefault(n => n.Message == "おめでとう！");
-				Audio.instance.PlaySE(string.Format(VoicePathFormat, message.SEName),2f);
+				Audio.instance.PlayVoice(string.Format(VoicePathFormat, message.SEName),2f);
 
 				// リザルト表示
 				ShowResult();
@@ -129,17 +129,17 @@ public class HomeScene : MonoBehaviour {
 				var message = yaleMessages.ElementAtOrDefault(Random.Range(0, yaleMessages.Count()));
 				if ( message != null )
 				{
-					Audio.instance.PlaySE(string.Format(VoicePathFormat, message.SEName), 2f + message.Delay);
+					Audio.instance.PlayVoice(string.Format(VoicePathFormat, message.SEName), 2f + message.Delay);
 					switch ( message.Type )
 					{
 						case 1:
-							Audio.instance.PlaySE(string.Format(Const.SEPathFormat, nameMaster.All.Find(x => x.Name == Name).SE1),2f);
+							Audio.instance.PlayVoice(string.Format(Const.SEPathFormat, nameMaster.All.Find(x => x.Name == Name).SE1),2f);
 							break;
 						case 2:
-							Audio.instance.PlaySE(string.Format(Const.SEPathFormat, nameMaster.All.Find(x => x.Name == Name).SE2),2f);
+							Audio.instance.PlayVoice(string.Format(Const.SEPathFormat, nameMaster.All.Find(x => x.Name == Name).SE2),2f);
 							break;
 						case 3:
-							Audio.instance.PlaySE(string.Format(Const.SEPathFormat, nameMaster.All.Find(x => x.Name == Name).SE3),2f);
+							Audio.instance.PlayVoice(string.Format(Const.SEPathFormat, nameMaster.All.Find(x => x.Name == Name).SE3),2f);
 							break;
 					}
 				}
@@ -197,19 +197,19 @@ public class HomeScene : MonoBehaviour {
 	IEnumerator CountDownRoutine()
 	{
 		var message = messageMaster.All.FirstOrDefault(n => n.Message == "用意はいい？");
-		Audio.instance.PlaySE(string.Format(VoicePathFormat, message.SEName));
+		Audio.instance.PlayVoice(string.Format(VoicePathFormat, message.SEName));
         yield return new WaitForSeconds(2f);
 		message = messageMaster.All.FirstOrDefault(n => n.Message == "3");
-		Audio.instance.PlaySE(string.Format(VoicePathFormat, message.SEName));
+		Audio.instance.PlayVoice(string.Format(VoicePathFormat, message.SEName));
 		yield return new WaitForSeconds(1f);
 		message = messageMaster.All.FirstOrDefault(n => n.Message == "2");
-		Audio.instance.PlaySE(string.Format(VoicePathFormat, message.SEName));
+		Audio.instance.PlayVoice(string.Format(VoicePathFormat, message.SEName));
 		yield return new WaitForSeconds(1f);
 		message = messageMaster.All.FirstOrDefault(n => n.Message == "1");
-		Audio.instance.PlaySE(string.Format(VoicePathFormat, message.SEName));
+		Audio.instance.PlayVoice(string.Format(VoicePathFormat, message.SEName));
 		yield return new WaitForSeconds(1f);
 		message = messageMaster.All.FirstOrDefault(n => n.Message == "スタート！");
-		Audio.instance.PlaySE(string.Format(VoicePathFormat, message.SEName));
+		Audio.instance.PlayVoice(string.Format(VoicePathFormat, message.SEName));
 		CurrentMode = Mode.Abs;
 	}
 	
@@ -262,6 +262,11 @@ public class HomeScene : MonoBehaviour {
 		{
 			return;
 		}
+        // あきらめるの？系のボイスを流す
+        var voices = messageMaster.All.Where(n => n.Timing == 3);
+        Audio.instance.PlayVoice(string.Format(VoicePathFormat,
+            voices.ElementAt(Random.Range(0, voices.Count())).SEName));
+
 		ResultRoot.gameObject.SetActive(false);
         AbsRoot.gameObject.SetActive(false);
 		HomeRoot.gameObject.SetActive(true);
@@ -301,7 +306,7 @@ public class HomeScene : MonoBehaviour {
 		if (!IsPlayingVoice) {
 			var messages = messageMaster.All.Where (n => n.Timing == (int)Const.PlaytTiming.HomeModelTouch);
 			var message = messages.ElementAtOrDefault (Random.Range (0, messages.Count ()));
-			Audio.instance.PlaySE (string.Format (VoicePathFormat, message.SEName));
+			Audio.instance.PlayVoice (string.Format (VoicePathFormat, message.SEName));
 			StartCoroutine(PlayVoiceInterval());
 		}
 	}

@@ -28,9 +28,9 @@ public class TitleScene : MonoBehaviour {
 			} else {
 				se = "47";
 			}
-			Audio.instance.PlaySE (string.Format(Const.SEPathFormat,se));
+			Audio.instance.PlayVoice (string.Format(Const.SEPathFormat,se));
 		} else {
-			Audio.instance.PlaySE (string.Format(Const.SEPathFormat,randomSEs[result].SEName));
+			Audio.instance.PlayVoice (string.Format(Const.SEPathFormat,randomSEs[result].SEName));
 		}
 	}
 
