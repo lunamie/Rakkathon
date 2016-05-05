@@ -262,8 +262,11 @@ public class HomeScene : MonoBehaviour {
 		{
 			return;
 		}
+        // あきらめるの？系のボイスを流す
+        var voices = messageMaster.All.Where(n => n.Timing == 3);
         Audio.instance.PlayVoice(string.Format(VoicePathFormat,
-            messageMaster.All.FirstOrDefault(n => n.Message == "あきらめるの？").SEName));
+            voices.ElementAt(Random.Range(0, voices.Count())).SEName));
+
 		ResultRoot.gameObject.SetActive(false);
         AbsRoot.gameObject.SetActive(false);
 		HomeRoot.gameObject.SetActive(true);

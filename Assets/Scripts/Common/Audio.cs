@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Collections;
 public class Audio : MonoBehaviour
 {
-	/// <summary>
-	/// インスタンス。シングルトン
-	/// </summary>
-	static private Audio instance_ = null;
+    private static readonly string VoicePathFormat = "Voice/{0}";
+    /// <summary>
+    /// インスタンス。シングルトン
+    /// </summary>
+    static private Audio instance_ = null;
 	static public Audio instance
 	{
 		get
@@ -41,11 +42,26 @@ public class Audio : MonoBehaviour
 		}
 	}
 
-	/// <summary>
-	/// SE再生
-	/// </summary>
-	/// <param name="fileName"></param>
-	public void PlayVoice( string fileName, float delay = 0f)
+
+    /// <summary>
+    /// SE再生
+    /// </summary>
+    /// <param name="fileName"></param>
+    public void PlayVoice(MessageMaster message)
+    {
+        if (message == null)
+        {
+            return;
+        }
+        PlayVoice(string.Format(VoicePathFormat, message.SEName, message.Delay));
+    }
+
+
+    /// <summary>
+    /// SE再生
+    /// </summary>
+    /// <param name="fileName"></param>
+    public void PlayVoice( string fileName, float delay = 0f)
 	{
 		if ( !clips.ContainsKey(fileName) )
 		{
