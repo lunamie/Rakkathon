@@ -19,6 +19,8 @@ public class Audio : MonoBehaviour
 	/// オーディオソース
 	/// </summary>
 	AudioSource source;
+	
+	AudioSource bgmSource;
 
 	/// <summary>
 	/// 読み込み済みクリップ
@@ -31,6 +33,7 @@ public class Audio : MonoBehaviour
 	void Awake()
 	{
 		source = gameObject.AddComponent<AudioSource>();
+		bgmSource = gameObject.AddComponent<AudioSource>();
 		gameObject.AddComponent<AudioListener>();
 
 		if (Application.isPlaying) {
@@ -42,25 +45,21 @@ public class Audio : MonoBehaviour
 	/// SE再生
 	/// </summary>
 	/// <param name="fileName"></param>
-	public void PlaySE( string fileName, float delay = 0f)
+	public void PlayVoice( string fileName, float delay = 0f)
 	{
 		if ( !clips.ContainsKey(fileName) )
 		{
 			clips[fileName] = Resources.Load<AudioClip>(fileName);
 		}
+        if (clips[fileName] == null)
+        {
+            Debug.LogError("そんなファイルないよ : " + fileName);
+        }
+        source.Stop();
+        source.clip = clips[fileName];
+        source.PlayDelayed(delay);
+    }
 
-		StartCoroutine(PlaySEWithDelay(clips[fileName], delay));
-	}
-
-	/// <summary>
-	/// SE再生
-	/// </summary>
-	/// <param name="fileName"></param>
-	public IEnumerator PlaySEWithDelay( AudioClip clip, float delay = 0f )
-	{
-		yield return new WaitForSeconds(delay);
-		source.PlayOneShot(clip);
-	}
 
 	/// <summary>
 	/// BGM再生
@@ -72,7 +71,7 @@ public class Audio : MonoBehaviour
 		{
 			clips[fileName] = Resources.Load<AudioClip>(fileName);
 		}
-		source.clip = clips[fileName];
-		source.Play();
+		bgmSource.clip = clips[fileName];
+		bgmSource.Play();
 	}
 }

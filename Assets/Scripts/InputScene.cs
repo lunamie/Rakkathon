@@ -44,7 +44,7 @@ public class InputScene : MonoBehaviour {
 	public void OnValueChanged(){
 		// ボイス再生
 		string seName = NameTable.All.Find(x => x.Name == NameDoropDown.captionText.text).SE1;
-		Audio.instance.PlaySE(string.Format(Const.SEPathFormat,seName));
+		Audio.instance.PlayVoice(string.Format(Const.SEPathFormat,seName));
 	}
 
 	// 決定ボタン
@@ -54,7 +54,7 @@ public class InputScene : MonoBehaviour {
 		// 目標体重
 		PlayerPrefs.SetFloat (Const.GoalHealthKey,float.Parse(Health.text));
 
-		Audio.instance.PlaySE (string.Format(Const.SEPathFormat,"125"));
+		Audio.instance.PlayVoice (string.Format(Const.SEPathFormat,"125"));
 
 		// ホームに遷移
 		SceneManager.LoadScene ("HomeScene");

@@ -11,7 +11,7 @@ public class DebugInput : MonoBehaviour
 	{
 		if ( Input.GetKeyDown(KeyCode.V) )
 		{
-			Audio.instance.PlaySE("Voice/Sample");
+			Audio.instance.PlayVoice("Voice/Sample");
 		}
 	}
 }
